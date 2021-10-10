@@ -14,6 +14,9 @@ Star::Star(SDL_Renderer *r, int x, int y, int speed, int size) {
 	this->y = y;
     renderer = r;
 	type = rand() % 3;
+	if (type < 2) {
+		this->speed = speed / 2;
+	}
 }
 
 void Star::draw() {
