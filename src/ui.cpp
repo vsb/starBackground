@@ -22,11 +22,11 @@ HWND get_wallpaper_window() {
         // Send 0x052C to Progman. This message directs Progman to spawn a 
         // WorkerW behind the desktop icons. If it is already there, nothing 
         // happens.
-        SendMessageTimeout(progman, 0x052C, 0, 0, SMTO_NORMAL, 1000, nullptr);
+        SendMessageTimeout(progman, 0x052C, 0, 0, SMTO_NORMAL, 1000, 0);
         // We enumerate all Windows, until we find one, that has the SHELLDLL_DefView 
         // as a child. 
         // If we found that window, we take its next sibling and assign it to workerw.
-        HWND wallpaper_hwnd = nullptr;
+        HWND wallpaper_hwnd = 0;
         EnumWindows(EnumWindowsProc, (LPARAM)&wallpaper_hwnd);
         // Return the handle you're looking for.
         return wallpaper_hwnd;
@@ -71,18 +71,33 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
         //                             flags
         // );
         window = SDL_CreateWindowFrom((void*)get_wallpaper_window());
+		SDL_UpdateWindowSurface(window);
+		SDL_Surface* temp = SDL_GetWindowSurface(window);
         renderer = SDL_CreateRenderer(window, -1, 0);
 
-        if(renderer) {
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        }
+        //if(renderer) {
+        //    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        //}
+
+		IMG_Init(IMG_INIT_PNG);
+		//SDL_Surface* temp = IMG_Load("image.png");
+		
+		//Filling texture with the image using a surface
+		texture = SDL_CreateTextureFromSurface(renderer, temp);
+		//Deleting the temporary surface
+		SDL_FreeSurface(temp);
+		rect.x = 0; //Extreme left of the window
+		rect.y = 0; //Very bottom of the window
+		rect.w = 2048; //100 pixels width
+		rect.h = 1152; //100 pixels height
+
     }
 
     srand (time(NULL));
     std::cout << stars << std::endl;
     for (int i = 0; i < stars; i++) {
         int size = rand() %  3 + 1;
-        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, size, size));
+        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() %  1 + 1, size));
     }
 
     return 0;
@@ -95,6 +110,7 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
  * @return No return value.
  */
 void UI::update() {
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
     int counter = 0;
     for(std::vector<Star>::iterator it = vect.begin(); it != vect.end(); ++it) {
         it->update();
@@ -115,7 +131,7 @@ void UI::update() {
  * @return No return value.
  */
 void UI::render() {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderPresent(renderer);
 }
 
@@ -136,7 +152,10 @@ void UI::clearRenderer() {
  * @return No return value.
  */
 void UI::clean() {
+    //Deleting the texture
+    SDL_DestroyTexture(texture);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	IMG_Quit();
 	SDL_Quit();
 }

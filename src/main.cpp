@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     UI ui = UI();
 
     if (argc == 1) {
-        ui.init("Stars", 1920, 1080, 300, false);
+        ui.init("Stars", 2048, 1152, 300, false);
     } else if (argc == 4) {
         ui.init("Stars", atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), false);
     } else {

@@ -40,4 +40,7 @@ class UI {
 
         int w, h;
 
+        SDL_Texture* texture;
+		SDL_Rect rect;
+
 };
