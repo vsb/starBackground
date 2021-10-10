@@ -23,9 +23,13 @@ class Star {
         int type;
         float x;
         float y;
+        double angle;
         
         SDL_Renderer *renderer;
         SDL_Rect starRect;
         SDL_Texture* texture;
+
+        float changeAngleTime;
+        bool right;
 
 };

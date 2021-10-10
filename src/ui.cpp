@@ -103,7 +103,7 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
     srand (time(NULL));
     std::cout << stars << std::endl;
     for (int i = 0; i < stars; i++) {
-        int size = rand() % 5 + 3;
+        int size = rand() % 10 + 3;
         vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 100 + 50, size, snowTexture));
     }
 
@@ -159,6 +159,7 @@ void UI::clearRenderer() {
 void UI::clean() {
     //Deleting the texture
     SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(snowTexture);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	IMG_Quit();

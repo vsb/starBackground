@@ -19,17 +19,31 @@ Star::Star(SDL_Renderer *r, int x, int y, int speed, int size, SDL_Texture* text
 	if (type < 2) {
 		this->speed = speed / 2;
 	}
+	right = !!(rand() % 1);
+	changeAngleTime = 0;
 }
 
 void Star::draw() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //SDL_RenderDrawRect(renderer, &starRect);
     //SDL_RenderFillRect(renderer, &starRect);
-	SDL_RenderCopy(renderer, texture, NULL, &starRect);
+	SDL_RenderCopyEx(renderer, texture, NULL, &starRect, angle, NULL, SDL_FLIP_NONE);
 }
 
 void Star::update(float dt) {
 	y += speed * dt;
+
+	changeAngleTime += dt;
+	if (changeAngleTime >= 7.f) {
+		changeAngleTime -= 7.f;
+		right = !right;
+	}
+	if (right) {
+		angle += speed * dt;
+	} else {
+		angle -= speed * dt;
+	}
+
     starRect.y = y;
 	int angle = speed / 3;
 	switch (type) {
