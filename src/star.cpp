@@ -4,10 +4,12 @@ Star::Star() {
     
 }
 
-Star::Star(SDL_Renderer *r, int x, int y, int speed, int size) {
+Star::Star(SDL_Renderer *r, int x, int y, int speed, int size, SDL_Texture* texture) {
     this->speed = speed;
 	this->size = size;
-    starRect.w = size = starRect.h = size;
+	this->texture = texture;
+    starRect.w = size;
+	starRect.h = size;
     starRect.x = x; 
     starRect.y = y;
 	this->x = x;
@@ -21,8 +23,9 @@ Star::Star(SDL_Renderer *r, int x, int y, int speed, int size) {
 
 void Star::draw() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(renderer, &starRect);
-    SDL_RenderFillRect(renderer, &starRect);
+    //SDL_RenderDrawRect(renderer, &starRect);
+    //SDL_RenderFillRect(renderer, &starRect);
+	SDL_RenderCopy(renderer, texture, NULL, &starRect);
 }
 
 void Star::update(float dt) {

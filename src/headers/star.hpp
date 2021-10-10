@@ -7,7 +7,7 @@ class Star {
 
     public:
         Star();
-        Star(SDL_Renderer *r, int x, int y, int speed, int size);
+        Star(SDL_Renderer *r, int x, int y, int speed, int size, SDL_Texture* texture);
 
         void update(float dt);
         void draw();
@@ -26,5 +26,6 @@ class Star {
         
         SDL_Renderer *renderer;
         SDL_Rect starRect;
+        SDL_Texture* texture;
 
 };

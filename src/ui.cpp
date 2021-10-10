@@ -82,13 +82,17 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
         //}
 
 		//IMG_Init(IMG_INIT_PNG);
-		IMG_Init(IMG_INIT_JPG);
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+
 		SDL_Surface* temp = IMG_Load("img4.jpg");
-		
-		//Filling texture with the image using a surface
 		texture = SDL_CreateTextureFromSurface(renderer, temp);
+
+		temp = IMG_Load("snow.png");
+		snowTexture = SDL_CreateTextureFromSurface(renderer, temp);
+
 		//Deleting the temporary surface
 		SDL_FreeSurface(temp);
+
 		rect.x = 0; //Extreme left of the window
 		rect.y = 0; //Very bottom of the window
 		rect.w = w; //100 pixels width
@@ -99,8 +103,8 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
     srand (time(NULL));
     std::cout << stars << std::endl;
     for (int i = 0; i < stars; i++) {
-        int size = rand() %  3 + 2;
-        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 100 + 50, size));
+        int size = rand() % 5 + 3;
+        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 100 + 50, size, snowTexture));
     }
 
     return 0;

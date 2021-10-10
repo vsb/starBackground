@@ -42,5 +42,5 @@ class UI {
 
         SDL_Texture* texture;
 		SDL_Rect rect;
-
+        SDL_Texture* snowTexture;
 };
