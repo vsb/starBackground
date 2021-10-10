@@ -71,16 +71,18 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
         //                             flags
         // );
         window = SDL_CreateWindowFrom((void*)get_wallpaper_window());
-		SDL_UpdateWindowSurface(window);
-		SDL_Surface* temp = SDL_GetWindowSurface(window);
-        renderer = SDL_CreateRenderer(window, -1, 0);
+		//SDL_UpdateWindowSurface(window);
+		//SDL_Surface* temp = SDL_GetWindowSurface(window);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear"); 
 
         //if(renderer) {
         //    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         //}
 
-		IMG_Init(IMG_INIT_PNG);
-		//SDL_Surface* temp = IMG_Load("image.png");
+		//IMG_Init(IMG_INIT_PNG);
+		IMG_Init(IMG_INIT_JPG);
+		SDL_Surface* temp = IMG_Load("img4.jpg");
 		
 		//Filling texture with the image using a surface
 		texture = SDL_CreateTextureFromSurface(renderer, temp);
@@ -96,8 +98,8 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
     srand (time(NULL));
     std::cout << stars << std::endl;
     for (int i = 0; i < stars; i++) {
-        int size = rand() %  3 + 1;
-        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() %  1 + 1, size));
+        int size = rand() %  3 + 2;
+        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 150 + 100, size));
     }
 
     return 0;
@@ -109,16 +111,14 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
  * @param None
  * @return No return value.
  */
-void UI::update() {
+void UI::update(float dt) {
 	SDL_RenderCopy(renderer, texture, NULL, &rect);
-    int counter = 0;
     for(std::vector<Star>::iterator it = vect.begin(); it != vect.end(); ++it) {
-        it->update();
+        it->update(dt);
         it->draw();
-        if (it->getX() > w) {
-           // counter++;
-            int size = rand() %  h + 1;
-            it->move(0, size);
+        if (it->isOff(w, h)) {
+            int x = rand() %  w + 1;
+            it->move(x, 0);
         }
     }
 

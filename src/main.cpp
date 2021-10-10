@@ -4,8 +4,7 @@
 #include "SDL2/SDL.h"
 
 
-#define FPS 30
-#define frameDelay = 1000 / FPS
+#define FPS 60
 
 /**
  * Limits update frequency rate. Bad implementation since it creates flickering due to
@@ -26,6 +25,7 @@ int main(int argc, char *argv[]) {
     // Ticks for fpsCap
     uint32_t startingTick;
     int endTick;
+	float frameDelay = 1000.f / FPS;
 
     UI ui = UI();
 
@@ -41,9 +41,12 @@ int main(int argc, char *argv[]) {
 
     SDL_Event event;
     bool isRunning = true;
+	float startTime = SDL_GetTicks();
     while(isRunning) {
         // Get the number of milliseconds since the SDL library initialization.
         startingTick = SDL_GetTicks();
+		float delta = startingTick - startTime;
+		startTime = startingTick;
         
 
         // --- USE THIS WHEN: You have an application window and want to be able to close it.
@@ -58,11 +61,15 @@ int main(int argc, char *argv[]) {
         // }
 
         ui.clearRenderer();
-        ui.update();
+        ui.update(frameDelay / 1000.f);
         ui.render();
 
         // See method-description
-        fpsCap(startingTick);
+        //fpsCap(startingTick);
+		if (frameDelay > delta) {
+			SDL_Delay(frameDelay - delta);
+		}
+		
     }
 
 
