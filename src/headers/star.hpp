@@ -21,6 +21,8 @@ class Star {
         int speed;
         int size;
         int type;
+        float x;
+        float y;
         
         SDL_Renderer *renderer;
         SDL_Rect starRect;

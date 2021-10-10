@@ -74,7 +74,8 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
 		//SDL_UpdateWindowSurface(window);
 		//SDL_Surface* temp = SDL_GetWindowSurface(window);
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear"); 
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+		//SDL_RenderSetLogicalSize(renderer, w*2, h*2);
 
         //if(renderer) {
         //    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -90,8 +91,8 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
 		SDL_FreeSurface(temp);
 		rect.x = 0; //Extreme left of the window
 		rect.y = 0; //Very bottom of the window
-		rect.w = 2048; //100 pixels width
-		rect.h = 1152; //100 pixels height
+		rect.w = w; //100 pixels width
+		rect.h = h; //100 pixels height
 
     }
 
@@ -99,7 +100,7 @@ int UI::init(const char *title, int w, int h, int stars, bool fullscreen) {
     std::cout << stars << std::endl;
     for (int i = 0; i < stars; i++) {
         int size = rand() %  3 + 2;
-        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 150 + 100, size));
+        vect.push_back(Star(renderer, rand() %  w + 1, rand() %  h + 1, rand() % 100 + 50, size));
     }
 
     return 0;
